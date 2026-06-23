@@ -7,13 +7,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { url } = req.body;
-
-  if (!url) {
-    return res.status(400).json({ error: 'URL is required' });
-  }
-
   try {
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const url = body?.url;
+
+    if (!url) {
+      return res.status(400).json({ error: 'URL is required' });
+    }
+
     const response = await fetch(MEDIA_SOURCE, {
       method: 'POST',
       headers: {
@@ -26,7 +27,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     const text = await response.text();
-
     let data;
     try {
       data = JSON.parse(text);
