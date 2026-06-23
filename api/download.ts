@@ -25,7 +25,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify({ url }),
     });
 
-    const data = await response.json();
+    const text = await response.text();
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return res.status(500).json({ error: 'Invalid response from source', raw: text.slice(0, 500) });
+    }
+
     return res.status(200).json(data);
   } catch (err: any) {
     return res.status(500).json({ error: err.message || 'Something went wrong' });
