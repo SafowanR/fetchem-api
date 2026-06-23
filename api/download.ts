@@ -26,7 +26,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify({ url }),
     });
 
+    console.log('downr status:', response.status);
     const text = await response.text();
+    console.log('downr response:', text.slice(0, 500));
+
     let data;
     try {
       data = JSON.parse(text);
@@ -36,6 +39,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json(data);
   } catch (err: any) {
+    console.log('error:', err.message);
     return res.status(500).json({ error: err.message || 'Something went wrong' });
   }
 }
