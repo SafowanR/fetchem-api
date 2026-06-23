@@ -15,6 +15,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'URL is required' });
     }
 
+    const session = process.env.DOWNR_SESSION || '';
+
     const response = await fetch(MEDIA_SOURCE, {
       method: 'POST',
       headers: {
@@ -22,13 +24,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Origin': 'https://downr.org',
         'Referer': 'https://downr.org/',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Cookie': `sess=${session}`,
       },
       body: JSON.stringify({ url }),
     });
 
     console.log('downr status:', response.status);
     const text = await response.text();
-    console.log('downr response:', text.slice(0, 500));
+    console.log('downr response:', text.slice(0, 300));
 
     let data;
     try {
@@ -39,7 +42,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json(data);
   } catch (err: any) {
-    console.log('error:', err.message);
     return res.status(500).json({ error: err.message || 'Something went wrong' });
   }
 }
