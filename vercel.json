@@ -1,8 +1,1 @@
-{
-  "functions": {
-    "api/download.ts": {
-      "runtime": "nodejs20.x",
-      "maxDuration": 10
-    }
-  }
-}
+{}
