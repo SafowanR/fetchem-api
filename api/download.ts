@@ -13,7 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'URL is required' });
     }
 
-    const response = await fetch('https://api.cobalt.tools/', {
+    const response = await fetch('https://cobalt-nch0.onrender.com/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
